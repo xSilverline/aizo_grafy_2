@@ -13,7 +13,7 @@
 std::default_random_engine generator;
 
 bool checkIfInside(listElement * check, int dest);
-int ** GraphGenerator::generateGraph(int v, int density, bool direct)
+void ** GraphGenerator::generateGraph(int v, int density, bool direct)
 {
     generator.seed(std::chrono::system_clock::now().time_since_epoch().count());
     std::uniform_int_distribution<int> destination(0,v-1);

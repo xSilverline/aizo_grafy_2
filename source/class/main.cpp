@@ -3,6 +3,7 @@
 #include "../headers/GraphGenerator.h"
 #include "../headers/Structures.h"
 #include "../headers/PrimMST.h"
+#include "../headers/Dijkstra.h"
 using namespace std;
 
 void showMenu(int problem);
@@ -162,7 +163,11 @@ void runAlgorithm(int algo)
         case 2:
             break;
         case 3:
+
+            Dijkstra dijkstra;
+            dijkstra.runOnList(graphList,v,e,0,4);
             break;
+
         case 4:
             break;
 

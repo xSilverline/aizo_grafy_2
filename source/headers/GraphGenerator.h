@@ -18,7 +18,7 @@ class GraphGenerator
         private:
             int ** graphMatrix;
             listElement ** graphList;
-            int ** generateGraph(int v, int density,bool direct);
+            void ** generateGraph(int v, int density,bool direct);
 };
 
 

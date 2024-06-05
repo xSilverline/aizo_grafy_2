@@ -2,6 +2,8 @@
 // Created by Silver on 05.06.2024.
 //
 
+#include <iostream>
+#include <iomanip>
 #include "../headers/Dijkstra.h"
 
 
@@ -52,12 +54,28 @@ void Dijkstra::runOnList(listElement ** graphList, int v, int e, int start, int 
         }
     }
 
+    auto * result = new listElement;
     for(int i = 0; i<v;i++)
     {
-        for(j=i; j>=0; j=prev[j])
+        for(j=end; j>=0; j=prev[j])
         {
-            resultList[i] =
+            result->wei = cost[j];
+            result->v = j;
+            resultList[j] = result;
         }
+    }
+
+    for(int i = 0; i < v; i++)
+    {
+        std::cout << "V [" << i << "] =";
+        result = resultList [i];
+        while(result)
+        {
+            std::cout <<std::setw(3)<< result->v<<":"<<result->wei;
+            result = result->next;
+        }
+        std::cout<<std::endl;
+
     }
 
 
@@ -67,4 +85,5 @@ void Dijkstra::runOnList(listElement ** graphList, int v, int e, int start, int 
     delete[] prev;
     delete [] QS;
     delete [] resultList;
+    delete result;
 }

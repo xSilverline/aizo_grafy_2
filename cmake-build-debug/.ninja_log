@@ -11,3 +11,7 @@
 45	1012	7392523091052023	CMakeFiles/aizo_grafy.dir/source/class/main.cpp.obj	10dc335d81f56ec6
 40	1013	7392523091062029	CMakeFiles/aizo_grafy.dir/source/class/PrimMST.cpp.obj	96b31b0962bce680
 1013	1196	7392523092866375	aizo_grafy.exe	9955fcba9b91902d
+43	1564	7392558196399712	CMakeFiles/aizo_grafy.dir/source/class/PrimMST.cpp.obj	96b31b0962bce680
+48	1569	7392558196439711	CMakeFiles/aizo_grafy.dir/source/class/Dijkstra.cpp.obj	8d266835b4ebe906
+38	2568	7392558206438935	CMakeFiles/aizo_grafy.dir/source/class/GraphGenerator.cpp.obj	300a80b4d021dd05
+36	1622	7392559058128332	CMakeFiles/aizo_grafy.dir/source/class/GraphGenerator.cpp.obj	300a80b4d021dd05
