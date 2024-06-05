@@ -13,63 +13,49 @@
 std::default_random_engine generator;
 
 bool checkIfInside(listElement * check, int dest);
-void ** GraphGenerator::generateGraph(int v, int density, bool direct)
-{
+void GraphGenerator::generateGraph(int v, int density, bool direct) {
     generator.seed(std::chrono::system_clock::now().time_since_epoch().count());
-    std::uniform_int_distribution<int> destination(0,v-1);
-    std::uniform_int_distribution<int> edgeWeightDist(1,100);
+    std::uniform_int_distribution<int> destination(0, v - 1);
+    std::uniform_int_distribution<int> edgeWeightDist(1, 100);
 
     int weight;
     graphMatrix = new int *[v];
-    graphList = new listElement * [v];
-    listElement *  nextElement;
+    graphList = new listElement *[v];
+    listElement *nextElement;
 
 //    int * fromV= new int [v];
     int toV[v];
     int e;
     int limit;
-    if(density==99)
-    {
-        e = (v*(v-1))/2;
-    }
-    else
-    {
-        float edges =  float(float(v * (v - 1)) / 2) * float(density) / 100;
-        e = int(edges);
-        if(e < v-1)
-        {
-            e = v-1;
+    if (density == 99) {
+        e = (v * (v - 1)) / 2;
+    } else {
+
+        e = ((v * (v - 1)) / 2) * (density) / 100;
+        if (e < v - 1) {
+            e = v - 1;
         }
     }
 
 
-
-
-
-    for(int i = 0; i<v;i++)
-    {
-        graphMatrix[i] = new int [e];
+    for (int i = 0; i < v; i++) {
+        graphMatrix[i] = new int[e];
         graphList[i] = nullptr;
 //        fromV[i] = 1;
         toV[i] = 1;
     }
-    for(int i = 0;i<v;i++)
-    {
-        for(int j = 0; j<e;j++)
-        {
+    for (int i = 0; i < v; i++) {
+        for (int j = 0; j < e; j++) {
             graphMatrix[i][j] = 0;
         }
 
     }
-    int tempE=0;
+    int tempE = 0;
 
-    if(density==99)
-    {
+    if (density == 99) {
 
-        for(int i = 0; i<v;i++)
-        {
-            for(int j = i+1;j<v;j++)
-            {
+        for (int i = 0; i < v; i++) {
+            for (int j = i + 1; j < v; j++) {
 
                 weight = edgeWeightDist(generator);
                 nextElement = new listElement;
@@ -78,8 +64,7 @@ void ** GraphGenerator::generateGraph(int v, int density, bool direct)
                 nextElement->next = graphList[i];
                 graphList[i] = nextElement;
 
-                if(!direct)
-                {
+                if (!direct) {
                     nextElement = new listElement;
                     nextElement->v = i;
                     nextElement->wei = weight;
@@ -90,9 +75,7 @@ void ** GraphGenerator::generateGraph(int v, int density, bool direct)
                     graphMatrix[j][tempE] = -weight;
                     tempE++;
 
-                }
-                else
-                {
+                } else {
                     graphMatrix[i][tempE] = weight;
                     graphMatrix[j][tempE] = -1;
                     tempE++;
@@ -103,19 +86,15 @@ void ** GraphGenerator::generateGraph(int v, int density, bool direct)
         }
 
 
-
-    }
-    else
-    {
+    } else {
 
 
-        for(int i = 0; i<v-1;i++)
-        {
+        for (int i = 0; i < v - 1; i++) {
             int destFrom = i;
             int destTo = destination(generator);
             weight = edgeWeightDist(generator);
 
-            while(destTo == destFrom || toV[destTo] == 0)
+            while (destTo == destFrom || toV[destTo] == 0)
                 destTo = destination(generator);
 
             toV[destTo] = 0;
@@ -125,8 +104,7 @@ void ** GraphGenerator::generateGraph(int v, int density, bool direct)
             nextElement->next = graphList[i];
             graphList[i] = nextElement;
 
-            if(!direct)
-            {
+            if (!direct) {
                 nextElement = new listElement;
                 nextElement->v = destFrom;
                 nextElement->wei = weight;
@@ -137,27 +115,23 @@ void ** GraphGenerator::generateGraph(int v, int density, bool direct)
                 graphMatrix[destTo][tempE] = -weight;
                 tempE++;
 
-            }
-            else
-            {
+            } else {
                 graphMatrix[i][tempE] = weight;
                 graphMatrix[destTo][tempE] = -1;
                 tempE++;
             }
 
 
-
-
         }
-        if(e>v-1)
-        {
-            for(int i = v-1;i<e;i++)
-            {
+
+
+        if ((int) e > v - 1) {
+            for (int i = v - 1; i < e; i++) {
                 int destFrom = destination(generator);
                 int destTo = destination(generator);
                 weight = edgeWeightDist(generator);
-                listElement * check = graphList[destFrom];
-                while(destTo == destFrom  || checkIfInside(check,destTo))
+                listElement *check = graphList[destFrom];
+                while (destTo == destFrom || checkIfInside(check, destTo))
                     destTo = destination(generator);
 
                 nextElement = new listElement;
@@ -166,8 +140,7 @@ void ** GraphGenerator::generateGraph(int v, int density, bool direct)
                 nextElement->next = graphList[destFrom];
                 graphList[destFrom] = nextElement;
 
-                if(!direct)
-                {
+                if (!direct) {
                     nextElement = new listElement;
                     nextElement->v = destFrom;
                     nextElement->wei = weight;
@@ -175,20 +148,17 @@ void ** GraphGenerator::generateGraph(int v, int density, bool direct)
                     graphList[destTo] = nextElement;
                     graphMatrix[destFrom][i] = weight;
                     graphMatrix[destTo][i] = -weight;
-                }
-                else
-                {
+                } else {
                     graphMatrix[destFrom][i] = weight;
                     graphMatrix[destTo][i] = -1;
                 }
 
 
-
-
             }
         }
     }
-}
+    }
+
 
 listElement **GraphGenerator::getList(int v, int density,bool direct)
 {

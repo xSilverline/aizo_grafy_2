@@ -1,3 +1,0 @@
-D:/InteliJ/Projects/C++/aizo_grafy/cmake-build-debug/CMakeFiles/aizo_grafy.dir
-D:/InteliJ/Projects/C++/aizo_grafy/cmake-build-debug/CMakeFiles/edit_cache.dir
-D:/InteliJ/Projects/C++/aizo_grafy/cmake-build-debug/CMakeFiles/rebuild_cache.dir

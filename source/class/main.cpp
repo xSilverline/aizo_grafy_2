@@ -1,13 +1,16 @@
 #include <iostream>
 #include <iomanip>
 #include "../headers/GraphGenerator.h"
+#include "../headers/GraphReader.h"
 #include "../headers/Structures.h"
 #include "../headers/PrimMST.h"
 #include "../headers/Dijkstra.h"
+#include <chrono>
+#include <windows.h>
 using namespace std;
 
 void showMenu(int problem);
-void readData();
+void readData(int p);
 void generateGraph(int p);
 void printGraph();
 void runAlgorithm(int algo);
@@ -15,6 +18,27 @@ void runAlgorithm(int algo);
 listElement ** graphList;
 int ** graphMatrix;
 int e,v,density;
+double freq;
+long long int counterStart;
+
+void startCounter() // FUNKCJA STARTUJĄCA LICZNIK DO POMIARU CZASU
+{
+    LARGE_INTEGER largeInteger;
+    if(!QueryPerformanceFrequency(& largeInteger))
+        cout<<"Blad zliczania czasu"<<endl;
+
+    freq = double(largeInteger.QuadPart) / 1000.0;
+
+    QueryPerformanceCounter(& largeInteger);
+    counterStart = largeInteger.QuadPart;
+}
+
+double getCounter() // FUNKCJA ZWRACAJĄCA OBECNY STAN LICZNIKA
+{
+    LARGE_INTEGER largeInteger;
+    QueryPerformanceCounter(& largeInteger);
+    return double(largeInteger.QuadPart-counterStart)/freq;
+}
 
 int main()
 {
@@ -59,7 +83,7 @@ void showMenu(int problem)
 
         switch (action) {
             case 1:
-                readData();
+                readData(problem);
                 break;
 
             case 2:
@@ -90,6 +114,7 @@ void showMenu(int problem)
 
 void generateGraph(int p)
 {
+    int opt;
     bool direct;
     if(p == 1)
         direct = false;
@@ -97,8 +122,14 @@ void generateGraph(int p)
         direct = true;
     cout<<"Podaj liczbe wierzcholkow: "<<endl;
     cin >> v;
-    cout<<"Podaj gestosc grafu: "<<endl;
-    cin >> density;
+    cout<<"Podaj gestosc grafu:\n 1. 25%\n 2. 50%\n 3. 99% "<<endl;
+    cin >> opt;
+    if(opt == 1)
+        density = 25;
+    else if(opt == 2)
+        density = 50;
+    else
+        density = 99;
     GraphGenerator generator{};
 
 
@@ -112,6 +143,16 @@ void generateGraph(int p)
         e = v-1;
     }
 
+}
+
+void readData(int p)
+{
+    GraphReader reader{};
+
+    graphList = reader.readList(p);
+    graphMatrix = reader.readMatrix(p);
+    e=reader.e;
+    v=reader.v;
 }
 
 void printGraph()
@@ -129,8 +170,7 @@ void printGraph()
 
     cout<<endl;
     cout<<endl;
-    cout<<endl;
-    cout<<endl;
+
     for(int i = 0; i < v; i++)
     {
         cout << "V [" << i << "] =";
@@ -144,10 +184,6 @@ void printGraph()
     }
 }
 
-void readData()
-{
-    return;
-}
 
 void runAlgorithm(int algo)
 {
@@ -155,17 +191,31 @@ void runAlgorithm(int algo)
     switch (algo)
     {
         case 1:
+        {
             PrimMST prim;
 
+            startCounter();
             prim.runOnList(graphList,v,e);
+            cout<<"Czas dzialania: "<<getCounter()<<endl<<endl;
+            startCounter();
             prim.runOnMatrix(graphMatrix,v,e);
+            cout<<"Czas dzialania: "<<getCounter()<<endl<<endl;
+        }
             break;
         case 2:
             break;
         case 3:
-
+        {
+            int start,end;
+            cout<<"Wierzcholek startowy: "<<endl;
+            cin>> start;
+            cout<<"Wierzcholek koncowy: "<<endl;
+            cin >> end;
             Dijkstra dijkstra;
-            dijkstra.runOnList(graphList,v,e,0,4);
+            startCounter();
+            dijkstra.runOnList(graphList,v,e,start,end);
+            cout<<"Czas dzialania: "<<getCounter()<<endl<<endl;
+        }
             break;
 
         case 4:
@@ -174,8 +224,6 @@ void runAlgorithm(int algo)
 
     }
 
-
-    return;
 }
 
 

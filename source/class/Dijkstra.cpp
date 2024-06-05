@@ -55,14 +55,24 @@ void Dijkstra::runOnList(listElement ** graphList, int v, int e, int start, int 
     }
 
     auto * result = new listElement;
-    for(int i = 0; i<v;i++)
+//    for(int i = 0; i<v;i++)
+//    {
+//        for(j=end; j>=0; j=prev[j])
+//        {
+//            result->wei = cost[j];
+//            result->v = j;
+//            resultList[j] = result;
+//        }
+//    }
+    int current = end;
+    while(current != start)
     {
-        for(j=end; j>=0; j=prev[j])
-        {
-            result->wei = cost[j];
-            result->v = j;
-            resultList[j] = result;
-        }
+        result = new listElement;
+        result->v = current;
+        result->wei = cost[current];
+        result->next = resultList[prev[current]];
+        resultList[prev[current]] = result;
+        current = prev[current];
     }
 
     for(int i = 0; i < v; i++)
