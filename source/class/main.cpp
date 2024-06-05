@@ -126,6 +126,10 @@ void printGraph()
 
     listElement *  nextElement;
 
+    cout<<endl;
+    cout<<endl;
+    cout<<endl;
+    cout<<endl;
     for(int i = 0; i < v; i++)
     {
         cout << "V [" << i << "] =";
@@ -151,7 +155,9 @@ void runAlgorithm(int algo)
     {
         case 1:
             PrimMST prim;
+
             prim.runOnList(graphList,v,e);
+            prim.runOnMatrix(graphMatrix,v,e);
             break;
         case 2:
             break;

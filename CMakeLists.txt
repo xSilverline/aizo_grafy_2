@@ -12,4 +12,6 @@ add_executable(aizo_grafy source/class/main.cpp
         source/class/PrimMST.cpp
         source/headers/PrimMST.h
         source/class/PriorityQueue.cpp
-        source/headers/PriorityQueue.h)
+        source/headers/PriorityQueue.h
+        source/class/Dijkstra.cpp
+        source/headers/Dijkstra.h)

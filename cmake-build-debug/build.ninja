@@ -79,6 +79,12 @@ build CMakeFiles/aizo_grafy.dir/source/class/PriorityQueue.cpp.obj: CXX_COMPILER
   OBJECT_DIR = CMakeFiles\aizo_grafy.dir
   OBJECT_FILE_DIR = CMakeFiles\aizo_grafy.dir\source\class
 
+build CMakeFiles/aizo_grafy.dir/source/class/Dijkstra.cpp.obj: CXX_COMPILER__aizo_grafy_unscanned_Debug D$:/InteliJ/Projects/C++/aizo_grafy/source/class/Dijkstra.cpp || cmake_object_order_depends_target_aizo_grafy
+  DEP_FILE = CMakeFiles\aizo_grafy.dir\source\class\Dijkstra.cpp.obj.d
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\aizo_grafy.dir
+  OBJECT_FILE_DIR = CMakeFiles\aizo_grafy.dir\source\class
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target aizo_grafy
@@ -87,7 +93,7 @@ build CMakeFiles/aizo_grafy.dir/source/class/PriorityQueue.cpp.obj: CXX_COMPILER
 #############################################
 # Link the executable aizo_grafy.exe
 
-build aizo_grafy.exe: CXX_EXECUTABLE_LINKER__aizo_grafy_Debug CMakeFiles/aizo_grafy.dir/source/class/main.cpp.obj CMakeFiles/aizo_grafy.dir/source/class/GraphGenerator.cpp.obj CMakeFiles/aizo_grafy.dir/source/class/GraphReader.cpp.obj CMakeFiles/aizo_grafy.dir/source/class/PrimMST.cpp.obj CMakeFiles/aizo_grafy.dir/source/class/PriorityQueue.cpp.obj
+build aizo_grafy.exe: CXX_EXECUTABLE_LINKER__aizo_grafy_Debug CMakeFiles/aizo_grafy.dir/source/class/main.cpp.obj CMakeFiles/aizo_grafy.dir/source/class/GraphGenerator.cpp.obj CMakeFiles/aizo_grafy.dir/source/class/GraphReader.cpp.obj CMakeFiles/aizo_grafy.dir/source/class/PrimMST.cpp.obj CMakeFiles/aizo_grafy.dir/source/class/PriorityQueue.cpp.obj CMakeFiles/aizo_grafy.dir/source/class/Dijkstra.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\aizo_grafy.dir
