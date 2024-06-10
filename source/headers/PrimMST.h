@@ -13,8 +13,10 @@ class PrimMST {
 public:
     void runOnMatrix(int **graphMatrix,int v,int e);
     void runOnList(listElement **graphList,int v,int e);
+private:
+//    static int ** mstMatrix;
 
-
+//    static void buildMatrix(int v, int e);
 };
 
 

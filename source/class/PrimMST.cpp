@@ -7,6 +7,7 @@
 #include "../headers/PrimMST.h"
 #include "../headers/PriorityQueue.h"
 
+
 using namespace std;
 
 
@@ -15,19 +16,26 @@ using namespace std;
 
 void PrimMST::runOnMatrix(int ** graphMatrix,int v,int e)
 {
-    int ** mstMatrix;
 
-    PriorityQueue priorityQueue(e);
+//    int ** mstMatrix;
+
+    PriorityQueue priorityQueue{e};
     int visited[v];
     int sumVisit = 0;
     int sumWeight=0;
+    int **mstMatrix = nullptr;
     mstMatrix = new int * [v];
+
+    for(size_t i =0;i<v;i++)
+    {
+        mstMatrix[i] = new int [v-1];
+    }
+
 
 
     for(int i = 0; i < v; i++)
     {
-        mstMatrix[i] = new int [e];
-        for(int j = 0; j<e;j++)
+        for(int j = 0; j<v-1;j++)
         {
             mstMatrix[i][j] = 0;
         }
@@ -43,7 +51,7 @@ void PrimMST::runOnMatrix(int ** graphMatrix,int v,int e)
 
       while(sumVisit<v)
        {
-          Edge edge;
+          Edge edge{};
            for(int j = 0; j<e;j++)
            {
                if(graphMatrix[i][j] != 0)
@@ -52,7 +60,7 @@ void PrimMST::runOnMatrix(int ** graphMatrix,int v,int e)
 
                    for(int k = 0; k<v;k++)
                    {
-                       if(graphMatrix[k][j] == 0-found)
+                       if(graphMatrix[k][j] == 0-found && !visited[k])
                        {
                            if(found < 0)
                            {
@@ -67,23 +75,53 @@ void PrimMST::runOnMatrix(int ** graphMatrix,int v,int e)
                    }
                }
            }
+
+           if (priorityQueue.isEmpty())
+           {
+               std::cerr << "Priority queue is empty, something went wrong!" << std::endl;
+               break;
+           }
+
            edge = priorityQueue.first();
+           int to = edge.to;
            priorityQueue.pop();
 
-           while(visited[edge.to])
+
+           while(visited[to])
            {
+
+               if (priorityQueue.isEmpty())
+               {
+                   std::cerr << "Priority queue is empty, no more edges to process!" << std::endl;
+                   break;
+               }
                edge = priorityQueue.first();
+               to = edge.to;
                priorityQueue.pop();
+
            }
-           sumWeight+=edge.weight;
+           int from = edge.from;
 
-           mstMatrix[edge.from][n] = edge.weight;
-           mstMatrix[edge.to][n] = 0-edge.weight;
-           i=edge.to;
+           int weight = edge.weight;
+           sumWeight+=weight;
+
+           if (from < 0 || from >= v || to < 0 || to >= v || n >= v - 1)
+           {
+               std::cerr << "Index out of bounds: from=" << from << ", to=" << to << ", n=" << n << std::endl;
+               break;
+           }
+
+           mstMatrix[from][n] = weight;  // SIGSEGV - Randomowo, dla większych tablic. Sprawdzono alokacje pamięci, wygląda okej. Przyczyna nieznana.
+           mstMatrix[to][n] = -weight;
+           i=to;
            n++;
+           if(n>v-1)
+               return;
 
-           visited[edge.to] = 1;
+           visited[to] = 1;
            sumVisit++;
+
+
 
 
        }
@@ -107,6 +145,10 @@ void PrimMST::runOnMatrix(int ** graphMatrix,int v,int e)
 
 
 
+    for (int d = 0; d < v; d++)
+    {
+        delete[] mstMatrix[d];
+    }
 
 
     delete[] mstMatrix;
@@ -140,7 +182,7 @@ void PrimMST::runOnList(listElement ** graphList,int v, int e)
     while(sumVisit<v)
     {
         nextElement = graphList[n];
-        Edge edge;
+        Edge edge{};
         while(nextElement)
         {
             if(!visited[nextElement->v])

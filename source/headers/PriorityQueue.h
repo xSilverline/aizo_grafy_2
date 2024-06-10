@@ -7,23 +7,30 @@
 
 struct Edge
 {
-    int from=-1;
-    int to=-1;
-    int weight=-1;
+    int from;
+    int to;
+    int weight;
 
 };
 
 class PriorityQueue {
-public:
-    PriorityQueue(int e);
     Edge * PriorityHeap;
     int position;
+    int capacity;
+public:
+    explicit PriorityQueue(int e);
+    ~PriorityQueue();
+
+
     Edge first();
     void push(Edge e);
     void pop();
+    void heapify(Edge *tab, int size, int i);
 
 
     bool isEmpty();
+
+    void resize();
 };
 
 

@@ -5,6 +5,7 @@
 #include "../headers/Structures.h"
 #include "../headers/PrimMST.h"
 #include "../headers/Dijkstra.h"
+#include "../headers/KruskalMST.h"
 #include <chrono>
 #include <windows.h>
 using namespace std;
@@ -192,7 +193,7 @@ void runAlgorithm(int algo)
     {
         case 1:
         {
-            PrimMST prim;
+            PrimMST prim{};
 
             startCounter();
             prim.runOnList(graphList,v,e);
@@ -203,6 +204,16 @@ void runAlgorithm(int algo)
         }
             break;
         case 2:
+        {
+            KruskalMST kruskal{};
+
+            startCounter();
+            kruskal.runOnList(graphList,v,e);
+            cout<<"Czas dzialania: "<<getCounter()<<endl<<endl;
+            startCounter();
+            kruskal.runOnMatrix(graphMatrix,v,e);
+            cout<<"Czas dzialania: "<<getCounter()<<endl<<endl;
+        }
             break;
         case 3:
         {
@@ -214,6 +225,9 @@ void runAlgorithm(int algo)
             Dijkstra dijkstra;
             startCounter();
             dijkstra.runOnList(graphList,v,e,start,end);
+            cout<<"Czas dzialania: "<<getCounter()<<endl<<endl;
+            startCounter();
+            dijkstra.runOnMatrix(graphMatrix,v,e,start,end);
             cout<<"Czas dzialania: "<<getCounter()<<endl<<endl;
         }
             break;
