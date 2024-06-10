@@ -1,12 +1,9 @@
-//
-// Created by Silver on 05.06.2024.
-//
 
 #include <iostream>
 #include <iomanip>
 #include "../headers/Dijkstra.h"
 
-
+using namespace std;
 void Dijkstra::runOnMatrix(int ** graphMatrix, int v, int e, int start, int end)
 {
     int * cost = new int[v];
@@ -80,14 +77,14 @@ void Dijkstra::runOnMatrix(int ** graphMatrix, int v, int e, int start, int end)
     {
         resultMatrix[current][edgeIndex] = -1;
         resultMatrix[prev[current]][edgeIndex] = cost[current];
-        std::cout<<"From: "<<prev[current]<<" To: "<<current<<" Weight: "<<cost[current]<<std::endl;
+        cout << "From: " << prev[current] << " To: " << current << " Weight: " << cost[current] << endl;
         current = prev[current];
         edgeIndex++;
     }
 
-
+    cout<<endl;
     for(int i = 0;i<v;i++)
-    {    std::cout<<std::setw(3)<<"|";
+    {    std::cout<<std::setw(3)<<i<<" |";
         for(int l = 0; l<edgeIndex;l++)
         {
             std::cout<<std::setw(4)<<resultMatrix[i][l];
@@ -95,6 +92,8 @@ void Dijkstra::runOnMatrix(int ** graphMatrix, int v, int e, int start, int end)
         std::cout<<std::setw(3)<<"|"<<std::endl;
     }
 
+
+    cout <<endl<< "Waga calkowita od " << start << " do " << end << " wynosi " << cost[end] << endl<<endl;
 
 
 
@@ -168,9 +167,10 @@ void Dijkstra::runOnList(listElement ** graphList, int v, int e, int start, int 
         result->wei = cost[current];
         result->next = resultList[prev[current]];
         resultList[prev[current]] = result;
+        cout << "From: " << prev[current] << " To: " << current << " Weight: " << cost[current] << endl;
         current = prev[current];
     }
-
+    cout<<endl;
     for(int i = 0; i < v; i++)
     {
         std::cout << "V [" << i << "] =";
@@ -183,6 +183,8 @@ void Dijkstra::runOnList(listElement ** graphList, int v, int e, int start, int 
         std::cout<<std::endl;
 
     }
+
+    cout <<endl<< "Waga calkowita od " << start << " do " << end << " wynosi " << cost[end] << endl<<endl;
 
 
 

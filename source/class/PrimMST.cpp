@@ -1,6 +1,3 @@
-//
-// Created by Silver on 04.06.2024.
-//
 
 #include <iostream>
 #include <iomanip>

@@ -6,6 +6,7 @@
 #include "../headers/PrimMST.h"
 #include "../headers/Dijkstra.h"
 #include "../headers/KruskalMST.h"
+#include "../headers/BellmanFord.h"
 #include <chrono>
 #include <windows.h>
 using namespace std;
@@ -233,6 +234,20 @@ void runAlgorithm(int algo)
             break;
 
         case 4:
+        {
+            int start,end;
+            cout<<"Wierzcholek startowy: "<<endl;
+            cin>> start;
+            cout<<"Wierzcholek koncowy: "<<endl;
+            cin >> end;
+            BellmanFord bellmanFord;
+            startCounter();
+            bellmanFord.runOnList(graphList,v,e,start,end);
+            cout<<"Czas dzialania: "<<getCounter()<<endl<<endl;
+            startCounter();
+            bellmanFord.runOnMatrix(graphMatrix,v,e,start,end);
+            cout<<"Czas dzialania: "<<getCounter()<<endl<<endl;
+        }
             break;
 
 

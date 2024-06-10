@@ -1,6 +1,3 @@
-//
-// Created by Silver on 09.06.2024.
-//
 
 #include "../headers/KruskalMST.h"
 #include "../headers/PriorityQueue.h"
