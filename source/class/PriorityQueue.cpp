@@ -20,7 +20,7 @@ PriorityQueue::~PriorityQueue()
 //    {
 //        delete PriorityHeap[i];
 //    }
-    std::cerr << position << std::endl;
+//    std::cerr << position << std::endl;
     delete [] PriorityHeap;
 
 }
@@ -28,7 +28,7 @@ PriorityQueue::~PriorityQueue()
 Edge PriorityQueue::first()
 {
     if (isEmpty()) {
-        std::cerr << "PriorityQueue is empty, cannot fetch first element!" << std::endl;
+//        std::cerr << "PriorityQueue is empty, cannot fetch first element!" << std::endl;
         return Edge{};
     }
     return PriorityHeap[0];
@@ -53,7 +53,7 @@ void PriorityQueue::resize() {
 void PriorityQueue::push(Edge e)
 {
     if (position >= capacity) {
-        std::cerr << "PriorityQueue overflow, cannot push new element! - "<<position << std::endl;
+//        std::cerr << "PriorityQueue overflow, cannot push new element! - "<<position << std::endl;
 //        return;
         resize();
     }
@@ -78,7 +78,7 @@ void PriorityQueue::push(Edge e)
 void PriorityQueue::pop()
 {
     if (isEmpty()) {
-        std::cerr << "PriorityQueue is empty, cannot pop element!" << std::endl;
+//        std::cerr << "PriorityQueue is empty, cannot pop element!" << std::endl;
         return;
     }
         position--;

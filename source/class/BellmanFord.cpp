@@ -1,5 +1,6 @@
 
 #include "../headers/BellmanFord.h"
+#include "../headers/Counters.h"
 
 #include <iostream>
 #include <vector>
@@ -19,6 +20,8 @@ struct Edge {
 
 
 void BellmanFord::runOnMatrix(int** graphMatrix, int v, int e, int start, int end) {
+    startCounter();
+
     int * cost = new int[v];
     int * prev = new int[v];
     int ** resultMatrix = new int * [v];
@@ -70,10 +73,13 @@ void BellmanFord::runOnMatrix(int** graphMatrix, int v, int e, int start, int en
     while (current != start && current != -1) {
         resultMatrix[current][edgeIndex] = -1;
         resultMatrix[prev[current]][edgeIndex] = cost[current];
-        cout << "From: " << prev[current] << " To: " << current << " Weight: " << cost[current] << endl;
+//        cout << "From: " << prev[current] << " To: " << current << " Weight: " << cost[current] << endl;
         current = prev[current];
         edgeIndex++;
     }
+
+
+    double time = getCounter();
     cout<<endl;
     for(int i = 0;i<v;i++)
     {    std::cout<<std::setw(3)<<i<<" |";
@@ -85,7 +91,7 @@ void BellmanFord::runOnMatrix(int** graphMatrix, int v, int e, int start, int en
     }
 
     cout <<endl<< "Waga calkowita od " << start << " do " << end << " wynosi " << cost[end] << endl<<endl;
-
+    cout<<"Czas dzialania: "<<time<<endl<<endl;
 
     delete[] cost;
     delete[] prev;
@@ -95,6 +101,7 @@ void BellmanFord::runOnMatrix(int** graphMatrix, int v, int e, int start, int en
 
 void BellmanFord::runOnList(listElement** graphList, int v, int e, int start, int end) {
 
+    startCounter();
     int * cost = new int[v];
     int * prev = new int[v];
     auto ** resultList = new listElement * [v];
@@ -140,9 +147,12 @@ void BellmanFord::runOnList(listElement** graphList, int v, int e, int start, in
         result->wei = cost[current];
         result->next = resultList[prev[current]];
         resultList[prev[current]] = result;
-        cout << "From: " << prev[current] << " To: " << current << " Weight: " << cost[current] << endl;
+//        cout << "From: " << prev[current] << " To: " << current << " Weight: " << cost[current] << endl;
         current = prev[current];
     }
+
+    double time = getCounter();
+
     cout<<endl;
     for(int i = 0; i < v; i++)
     {
@@ -158,7 +168,7 @@ void BellmanFord::runOnList(listElement** graphList, int v, int e, int start, in
     }
 
     cout <<endl<< "Waga calkowita od " << start << " do " << end << " wynosi " << cost[end] << endl<<endl;
-
+    cout<<"Czas dzialania: "<<time<<endl<<endl;
 
     delete[] result;
     delete[] cost;

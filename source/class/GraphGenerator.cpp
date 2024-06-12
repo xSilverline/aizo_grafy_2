@@ -14,11 +14,13 @@ std::default_random_engine generator;
 
 bool checkIfInside(listElement * check, int dest);
 void GraphGenerator::generateGraph(int v, int density, bool direct) {
+
     generator.seed(std::chrono::system_clock::now().time_since_epoch().count());
     std::uniform_int_distribution<int> destination(0, v - 1);
     std::uniform_int_distribution<int> edgeWeightDist(1, 100);
 
     int weight;
+    int *numOfIndex;
     graphMatrix = new int *[v];
     graphList = new listElement *[v];
     listElement *nextElement;
@@ -52,10 +54,18 @@ void GraphGenerator::generateGraph(int v, int density, bool direct) {
     }
     int tempE = 0;
 
-    if (density == 99) {
+    if (density == 99)
+    {
+        numOfIndex = new int[v]{0};
+
 
         for (int i = 0; i < v; i++) {
-            for (int j = i + 1; j < v; j++) {
+
+            for (int j = i + 1; j < v; j++)
+            {
+
+
+
 
                 weight = edgeWeightDist(generator);
                 nextElement = new listElement;
@@ -80,11 +90,143 @@ void GraphGenerator::generateGraph(int v, int density, bool direct) {
                     graphMatrix[j][tempE] = -1;
                     tempE++;
                 }
-
+                numOfIndex[i]++;
 
             }
         }
 
+        if(e/100)
+        {
+            int numToDel = e/100;
+            std::cout<<"E = "<<e<<std::endl;
+            int vortex = 0;
+            int edges = e;
+
+            while(numToDel)
+            {
+                std::uniform_int_distribution<int> index(0, edges-1);
+                int idx = index(generator);
+                int found =0;
+                int delTo=0;
+                int delFrom=0;
+                bool flag = false;
+
+                for(int i = 0; i<v;i++)
+                {
+                    listElement* toDelete = graphList[i];
+                    listElement* toDelprev = nullptr;
+
+                    listElement* directDel = nullptr;
+                    listElement* directPrev = nullptr;
+
+                    while(toDelete)
+                    {
+                        if(found == idx)
+                        {
+                            delFrom = i;
+                            delTo = toDelete->v;
+                            if(!toDelprev)
+                            {
+                                graphList[i] = toDelete->next;
+                            }
+                            else
+                            {
+                                toDelprev->next = toDelete->next;
+                            }
+
+                            if(!direct)
+                            {
+                                directDel = graphList[delTo];
+                                while(directDel->v != i)
+                                {   directPrev = directDel;
+                                    directDel= directDel->next;
+                                }
+                                if(!directPrev)
+                                {
+                                    graphList[delTo] = directDel->next;
+                                }
+                                else
+                                {
+                                    directPrev->next = directDel->next;
+                                }
+
+
+                            }
+                            flag = true;
+                            break;
+
+                        }
+                        found++;
+                        toDelprev = toDelete;
+                        toDelete = toDelete->next;
+                    }
+
+                    if(flag)
+                    {
+                        break;
+                    }
+
+                }
+//                std::cout<<"Del from "<<delFrom <<"edge to "<<delTo<<std::endl;;
+
+
+
+
+//                int idx = index(generator);
+//                int delTo=0;
+//                vortex = destination(generator);
+//                std::cout<<"Del from "<<vortex;
+//                while(numOfIndex[vortex] < 2  || !graphList[vortex])
+//                {
+//                    vortex = destination(generator);
+//                }
+//
+//                listElement* toDelete = graphList[vortex];
+//
+//                if(idx == 0)
+//                {
+//                    graphList[vortex] = toDelete->next;
+//                    delTo = toDelete->v;
+//                    std::cout<<" edge to "<<toDelete->v<<std::endl;
+//                }
+//                else
+//                {
+//                    listElement* toDelprev;
+//                    for(int i=0;i<idx;i++)
+//                    {
+//                        toDelprev = toDelete;
+//                        toDelete=toDelete->next;
+//                    }
+//                    delTo = toDelete->v;
+//                    toDelprev->next = toDelete->next;
+//                    std::cout<<" edge to "<<toDelete->v<<std::endl;
+//
+//
+//
+//                }
+
+                for(int i = 0; i<e; i++)
+                {
+                    if(graphMatrix[delFrom][i] != 0 && graphMatrix[delTo][i] != 0)
+                    {
+                        graphMatrix[delFrom][i] = 0;
+                        graphMatrix[delTo][i] = 0;
+                        break;
+                    }
+                }
+
+
+                numOfIndex[vortex]--;
+                numToDel--;
+
+
+            }
+
+
+
+        }
+
+        delete[] numOfIndex;
 
     } else {
 

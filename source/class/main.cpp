@@ -8,7 +8,7 @@
 #include "../headers/KruskalMST.h"
 #include "../headers/BellmanFord.h"
 #include <chrono>
-#include <windows.h>
+
 using namespace std;
 
 void showMenu(int problem);
@@ -20,27 +20,7 @@ void runAlgorithm(int algo);
 listElement ** graphList;
 int ** graphMatrix;
 int e,v,density;
-double freq;
-long long int counterStart;
 
-void startCounter() // FUNKCJA STARTUJĄCA LICZNIK DO POMIARU CZASU
-{
-    LARGE_INTEGER largeInteger;
-    if(!QueryPerformanceFrequency(& largeInteger))
-        cout<<"Blad zliczania czasu"<<endl;
-
-    freq = double(largeInteger.QuadPart) / 1000.0;
-
-    QueryPerformanceCounter(& largeInteger);
-    counterStart = largeInteger.QuadPart;
-}
-
-double getCounter() // FUNKCJA ZWRACAJĄCA OBECNY STAN LICZNIKA
-{
-    LARGE_INTEGER largeInteger;
-    QueryPerformanceCounter(& largeInteger);
-    return double(largeInteger.QuadPart-counterStart)/freq;
-}
 
 int main()
 {
@@ -68,12 +48,12 @@ void showMenu(int problem)
 
         if(problem == 1)
         {
-            cout<< "1. Wczytaj dane z pliku\n2. Wygeneruj graf losowo\n3. Wyswietl graf listowo i macierzowo na ekranie\n4. Algorytm 1\n5. Algorytm 2"<< endl;
+            cout<< "1. Wczytaj dane z pliku\n2. Wygeneruj graf losowo\n3. Wyswietl graf listowo i macierzowo na ekranie\n4. Algorytm Prima\n5. Algorytm Kruskala"<< endl;
             cin >> action;
         }
         else if(problem == 2)
         {
-            cout<< "1. Wczytaj dane z pliku\n2. Wygeneruj graf losowo\n3. Wyswietl graf listowo i macierzowo na ekranie\n4. Algorytm 1\n5. Algorytm 2"<< endl;
+            cout<< "1. Wczytaj dane z pliku\n2. Wygeneruj graf losowo\n3. Wyswietl graf listowo i macierzowo na ekranie\n4. Algorytm Dijkstry\n5. Algorytm Bellmana-Forda"<< endl;
             cin >> action;
             if(action > 3)
                 action+=2;
@@ -160,7 +140,7 @@ void readData(int p)
 void printGraph()
 {
     for(int i = 0;i<v;i++)
-    {    cout<<setw(3)<<"|";
+    {    cout<<setw(3)<<i<<" |";
         for(int j = 0; j<e;j++)
         {
             cout<<setw(4)<<graphMatrix[i][j];
@@ -196,24 +176,24 @@ void runAlgorithm(int algo)
         {
             PrimMST prim{};
 
-            startCounter();
+//            startCounter();
             prim.runOnList(graphList,v,e);
-            cout<<"Czas dzialania: "<<getCounter()<<endl<<endl;
-            startCounter();
+//            cout<<"Czas dzialania: "<<getCounter()<<endl<<endl;
+//            startCounter();
             prim.runOnMatrix(graphMatrix,v,e);
-            cout<<"Czas dzialania: "<<getCounter()<<endl<<endl;
+//            cout<<"Czas dzialania: "<<getCounter()<<endl<<endl;
         }
             break;
         case 2:
         {
             KruskalMST kruskal{};
 
-            startCounter();
+//            startCounter();
             kruskal.runOnList(graphList,v,e);
-            cout<<"Czas dzialania: "<<getCounter()<<endl<<endl;
-            startCounter();
+//            cout<<"Czas dzialania: "<<getCounter()<<endl<<endl;
+//            startCounter();
             kruskal.runOnMatrix(graphMatrix,v,e);
-            cout<<"Czas dzialania: "<<getCounter()<<endl<<endl;
+//            cout<<"Czas dzialania: "<<getCounter()<<endl<<endl;
         }
             break;
         case 3:
@@ -224,12 +204,12 @@ void runAlgorithm(int algo)
             cout<<"Wierzcholek koncowy: "<<endl;
             cin >> end;
             Dijkstra dijkstra;
-            startCounter();
+//            startCounter();
             dijkstra.runOnList(graphList,v,e,start,end);
-            cout<<"Czas dzialania: "<<getCounter()<<endl<<endl;
-            startCounter();
+//            cout<<"Czas dzialania: "<<getCounter()<<endl<<endl;
+//            startCounter();
             dijkstra.runOnMatrix(graphMatrix,v,e,start,end);
-            cout<<"Czas dzialania: "<<getCounter()<<endl<<endl;
+//            cout<<"Czas dzialania: "<<getCounter()<<endl<<endl;
         }
             break;
 
@@ -241,12 +221,12 @@ void runAlgorithm(int algo)
             cout<<"Wierzcholek koncowy: "<<endl;
             cin >> end;
             BellmanFord bellmanFord;
-            startCounter();
+//            startCounter();
             bellmanFord.runOnList(graphList,v,e,start,end);
-            cout<<"Czas dzialania: "<<getCounter()<<endl<<endl;
-            startCounter();
+//            cout<<"Czas dzialania: "<<getCounter()<<endl<<endl;
+//            startCounter();
             bellmanFord.runOnMatrix(graphMatrix,v,e,start,end);
-            cout<<"Czas dzialania: "<<getCounter()<<endl<<endl;
+//            cout<<"Czas dzialania: "<<getCounter()<<endl<<endl;
         }
             break;
 

@@ -3,6 +3,7 @@
 #include <iomanip>
 #include "../headers/PrimMST.h"
 #include "../headers/PriorityQueue.h"
+#include "../headers/Counters.h"
 
 
 using namespace std;
@@ -15,7 +16,7 @@ void PrimMST::runOnMatrix(int ** graphMatrix,int v,int e)
 {
 
 //    int ** mstMatrix;
-
+    startCounter();
     PriorityQueue priorityQueue{e};
     int visited[v];
     int sumVisit = 0;
@@ -123,10 +124,11 @@ void PrimMST::runOnMatrix(int ** graphMatrix,int v,int e)
 
        }
 
+      double time = getCounter();
 
 
     for(i = 0;i<v;i++)
-    {    cout<<setw(3)<<"|";
+    {    cout<<setw(3)<<i<<" |";
         for(int j = 0; j<n;j++)
         {
             cout<<setw(4)<<mstMatrix[i][j];
@@ -139,6 +141,8 @@ void PrimMST::runOnMatrix(int ** graphMatrix,int v,int e)
     std::cout<<std::endl;
     std::cout<<"Waga: "<<sumWeight<<std::endl;
     std::cout<<std::endl;
+
+    cout<<"Czas dzialania: "<<time<<endl<<endl;
 
 
 
@@ -153,6 +157,7 @@ void PrimMST::runOnMatrix(int ** graphMatrix,int v,int e)
 
 void PrimMST::runOnList(listElement ** graphList,int v, int e)
 {
+    startCounter();
     listElement *  nextElement;
     listElement *  currentNode;
     listElement ** mstList;
@@ -223,7 +228,7 @@ void PrimMST::runOnList(listElement ** graphList,int v, int e)
     }
 
 
-
+    double time = getCounter();
 
     for(int i = 0; i < v; i++)
     {
@@ -241,6 +246,8 @@ void PrimMST::runOnList(listElement ** graphList,int v, int e)
     std::cout<<std::endl;
     std::cout<<"Waga: "<<sumWeight<<std::endl;
     std::cout<<std::endl;
+
+    cout<<"Czas dzialania: "<<time<<endl<<endl;
 
     delete[]mstList;
 }

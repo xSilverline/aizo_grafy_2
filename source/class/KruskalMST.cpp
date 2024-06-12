@@ -1,6 +1,7 @@
 
 #include "../headers/KruskalMST.h"
 #include "../headers/PriorityQueue.h"
+#include "../headers/Counters.h"
 #include <iostream>
 #include <iomanip>
 
@@ -8,6 +9,7 @@ using namespace std;
 
 void KruskalMST::runOnMatrix(int **graphMatrix, int v, int e)
 {
+    startCounter();
     PriorityQueue priorityQueue{e};
     int visited[v];
     int setNumber[v];
@@ -144,9 +146,10 @@ void KruskalMST::runOnMatrix(int **graphMatrix, int v, int e)
 
 
     }
+    double time = getCounter();
 
     for(int i = 0;i<v;i++)
-    {    cout<<setw(3)<<"|";
+    {    cout<<setw(3)<<i<<" |";
         for(int j = 0; j<n;j++)
         {
             cout<<setw(4)<<mstMatrix[i][j];
@@ -160,12 +163,16 @@ void KruskalMST::runOnMatrix(int **graphMatrix, int v, int e)
     std::cout<<"Waga: "<<sumWeight<<std::endl;
     std::cout<<std::endl;
 
+    cout<<"Czas dzialania: "<<time<<endl<<endl;
+
 
     delete[] mstMatrix;
 
 }
 
 void KruskalMST::runOnList(listElement **graphList, int v, int e) {
+
+    startCounter();
     PriorityQueue priorityQueue{e};
     int visited[v];
     int setNumber[v];
@@ -301,6 +308,7 @@ void KruskalMST::runOnList(listElement **graphList, int v, int e) {
             break;
     }
 
+    double time = getCounter();
     for(int i = 0; i < v; i++)
     {
         std::cout << "V [" << i << "] =";
@@ -317,6 +325,8 @@ void KruskalMST::runOnList(listElement **graphList, int v, int e) {
     std::cout<<std::endl;
     std::cout<<"Waga: "<<sumWeight<<std::endl;
     std::cout<<std::endl;
+
+    cout<<"Czas dzialania: "<<time<<endl<<endl;
 
     delete[]mstList;
 
