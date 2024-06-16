@@ -14,6 +14,7 @@ class GraphGenerator
         public:
             listElement ** getList(int v,int density,bool direct);
             int ** getMatrix(int v, int density,bool direct);
+            int getEdgeNumber();
 
         private:
             int ** graphMatrix;

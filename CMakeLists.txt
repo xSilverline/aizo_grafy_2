@@ -19,4 +19,7 @@ add_executable(aizo_grafy source/class/main.cpp
         source/headers/KruskalMST.h
         source/class/BellmanFord.cpp
         source/headers/BellmanFord.h
-        source/headers/Counters.h)
+        source/headers/Counters.h
+        source/class/Tester.cpp
+        source/headers/Tester.h
+        source/headers/allheaders.h)

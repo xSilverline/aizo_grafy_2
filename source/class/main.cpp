@@ -1,12 +1,6 @@
 #include <iostream>
 #include <iomanip>
-#include "../headers/GraphGenerator.h"
-#include "../headers/GraphReader.h"
-#include "../headers/Structures.h"
-#include "../headers/PrimMST.h"
-#include "../headers/Dijkstra.h"
-#include "../headers/KruskalMST.h"
-#include "../headers/BellmanFord.h"
+#include "../headers/allheaders.h"
 #include <chrono>
 
 using namespace std;
@@ -17,8 +11,8 @@ void generateGraph(int p);
 void printGraph();
 void runAlgorithm(int algo);
 
-listElement ** graphList;
-int ** graphMatrix;
+listElement ** graphList = nullptr;
+int ** graphMatrix = nullptr;
 int e,v,density;
 
 
@@ -34,6 +28,11 @@ int main()
             showMenu(1);
         else if(action == 2)
             showMenu(2);
+        else if(action == 3)
+        {
+            Tester tester;
+            tester.beginTest();
+        }
         else
             cout<<"Nie ma takiego elementu menu"<<endl;
     }
@@ -61,6 +60,10 @@ void showMenu(int problem)
         else
             return;
 
+        if(action > 2 && (graphMatrix == nullptr || graphList == nullptr))
+            action = 8;
+
+
 
 
         switch (action) {
@@ -85,6 +88,9 @@ void showMenu(int problem)
                 break;
             case 7:
                 runAlgorithm(4);
+                break;
+            case 8:
+                cout<<"Brak danych ! Wygeneruj nowe dane!"<<endl;
                 break;
             case 0:
                 return ;
@@ -119,11 +125,8 @@ void generateGraph(int p)
     graphMatrix = generator.getMatrix(v,density,direct);
     graphList = generator.getList(v,density,direct);
 
-    e = ((v*(v-1))/2)*density/100;
-    if(e < v-1)
-    {
-        e = v-1;
-    }
+    e = generator.getEdgeNumber();
+//    cout<<"Edges after del: "<<e<<endl<<endl;
 
 }
 
@@ -164,6 +167,8 @@ void printGraph()
         }
         cout<<endl;
     }
+
+    cout<<graphMatrix[0][e-1];
 }
 
 
@@ -175,58 +180,56 @@ void runAlgorithm(int algo)
         case 1:
         {
             PrimMST prim{};
+            prim.runOnList(graphList,v,e,true);
+            prim.runOnMatrix(graphMatrix,v,e,true);
 
-//            startCounter();
-            prim.runOnList(graphList,v,e);
-//            cout<<"Czas dzialania: "<<getCounter()<<endl<<endl;
-//            startCounter();
-            prim.runOnMatrix(graphMatrix,v,e);
-//            cout<<"Czas dzialania: "<<getCounter()<<endl<<endl;
         }
             break;
         case 2:
         {
             KruskalMST kruskal{};
-
-//            startCounter();
-            kruskal.runOnList(graphList,v,e);
-//            cout<<"Czas dzialania: "<<getCounter()<<endl<<endl;
-//            startCounter();
-            kruskal.runOnMatrix(graphMatrix,v,e);
-//            cout<<"Czas dzialania: "<<getCounter()<<endl<<endl;
+            kruskal.runOnList(graphList,v,e,true);
+            kruskal.runOnMatrix(graphMatrix,v,e,true);
         }
             break;
         case 3:
         {
             int start,end;
-            cout<<"Wierzcholek startowy: "<<endl;
-            cin>> start;
-            cout<<"Wierzcholek koncowy: "<<endl;
-            cin >> end;
+            while(true)
+            {
+                cout<<"Wierzcholek startowy: "<<endl;
+                cin>> start;
+                cout<<"Wierzcholek koncowy: "<<endl;
+                cin >> end;
+                if(start < 0 || end < 0 || start > v-1 || end > v-1)
+                    cout<<"Bledny wierzcholek! Start i end powinny być z zakresu [0,"<<v-1<<"] ! "<<endl<<endl;
+                else
+                    break;
+            }
+
             Dijkstra dijkstra;
-//            startCounter();
-            dijkstra.runOnList(graphList,v,e,start,end);
-//            cout<<"Czas dzialania: "<<getCounter()<<endl<<endl;
-//            startCounter();
-            dijkstra.runOnMatrix(graphMatrix,v,e,start,end);
-//            cout<<"Czas dzialania: "<<getCounter()<<endl<<endl;
+            dijkstra.runOnList(graphList,v,e,start,end,true);
+            dijkstra.runOnMatrix(graphMatrix,v,e,start,end,true);
         }
             break;
 
         case 4:
         {
             int start,end;
-            cout<<"Wierzcholek startowy: "<<endl;
-            cin>> start;
-            cout<<"Wierzcholek koncowy: "<<endl;
-            cin >> end;
+            while(true)
+            {
+                cout<<"Wierzcholek startowy: "<<endl;
+                cin>> start;
+                cout<<"Wierzcholek koncowy: "<<endl;
+                cin >> end;
+                if(start < 0 || end < 0 || start > v-1 || end > v-1)
+                    cout<<"Bledny wierzcholek! Start i end powinny być z zakresu [0,"<<v-1<<"] ! "<<endl<<endl;
+                else
+                    break;
+            }
             BellmanFord bellmanFord;
-//            startCounter();
-            bellmanFord.runOnList(graphList,v,e,start,end);
-//            cout<<"Czas dzialania: "<<getCounter()<<endl<<endl;
-//            startCounter();
-            bellmanFord.runOnMatrix(graphMatrix,v,e,start,end);
-//            cout<<"Czas dzialania: "<<getCounter()<<endl<<endl;
+            bellmanFord.runOnList(graphList,v,e,start,end,true);
+            bellmanFord.runOnMatrix(graphMatrix,v,e,start,end,true);
         }
             break;
 

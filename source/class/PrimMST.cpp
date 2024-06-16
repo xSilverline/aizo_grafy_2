@@ -12,7 +12,7 @@ using namespace std;
 
 
 
-void PrimMST::runOnMatrix(int ** graphMatrix,int v,int e)
+double PrimMST::runOnMatrix(int ** graphMatrix,int v,int e,bool print)
 {
 
 //    int ** mstMatrix;
@@ -114,7 +114,7 @@ void PrimMST::runOnMatrix(int ** graphMatrix,int v,int e)
            i=to;
            n++;
            if(n>v-1)
-               return;
+               break;
 
            visited[to] = 1;
            sumVisit++;
@@ -126,23 +126,27 @@ void PrimMST::runOnMatrix(int ** graphMatrix,int v,int e)
 
       double time = getCounter();
 
+      if(print)
+      {
+          for(i = 0;i<v;i++)
+          {    cout<<setw(3)<<i<<" |";
+              for(int j = 0; j<n;j++)
+              {
+                  cout<<setw(4)<<mstMatrix[i][j];
+              }
+              cout<<setw(3)<<"|"<<endl;
+          }
 
-    for(i = 0;i<v;i++)
-    {    cout<<setw(3)<<i<<" |";
-        for(int j = 0; j<n;j++)
-        {
-            cout<<setw(4)<<mstMatrix[i][j];
-        }
-        cout<<setw(3)<<"|"<<endl;
-    }
 
 
+          std::cout<<std::endl;
+          std::cout<<"Waga: "<<sumWeight<<std::endl;
+          std::cout<<std::endl;
 
-    std::cout<<std::endl;
-    std::cout<<"Waga: "<<sumWeight<<std::endl;
-    std::cout<<std::endl;
+          cout<<"Czas dzialania: "<<time<<endl<<endl;
+      }
 
-    cout<<"Czas dzialania: "<<time<<endl<<endl;
+
 
 
 
@@ -153,9 +157,10 @@ void PrimMST::runOnMatrix(int ** graphMatrix,int v,int e)
 
 
     delete[] mstMatrix;
+    return time;
 }
 
-void PrimMST::runOnList(listElement ** graphList,int v, int e)
+double PrimMST::runOnList(listElement ** graphList,int v, int e,bool print)
 {
     startCounter();
     listElement *  nextElement;
@@ -230,24 +235,26 @@ void PrimMST::runOnList(listElement ** graphList,int v, int e)
 
     double time = getCounter();
 
-    for(int i = 0; i < v; i++)
+    if(print)
     {
-        std::cout << "V [" << i << "] =";
-        nextElement = mstList [i];
-        while(nextElement)
-        {
-            std::cout <<std::setw(3)<< nextElement->v<<":"<<nextElement->wei;
-            nextElement = nextElement->next;
-        }
-        std::cout<<std::endl;
+        for (int i = 0; i < v; i++) {
+            std::cout << "V [" << i << "] =";
+            nextElement = mstList[i];
+            while (nextElement) {
+                std::cout << std::setw(3) << nextElement->v << ":" << nextElement->wei;
+                nextElement = nextElement->next;
+            }
+            std::cout << std::endl;
 
+        }
+
+        std::cout << std::endl;
+        std::cout << "Waga: " << sumWeight << std::endl;
+        std::cout << std::endl;
+
+        cout << "Czas dzialania: " << time << endl << endl;
     }
 
-    std::cout<<std::endl;
-    std::cout<<"Waga: "<<sumWeight<<std::endl;
-    std::cout<<std::endl;
-
-    cout<<"Czas dzialania: "<<time<<endl<<endl;
-
     delete[]mstList;
+    return time;
 }

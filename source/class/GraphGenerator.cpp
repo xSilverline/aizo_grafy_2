@@ -1,7 +1,3 @@
-//
-// Created by Silver on 04.06.2024.
-//
-
 
 #include <chrono>
 #include <random>
@@ -11,8 +7,13 @@
 
 
 std::default_random_engine generator;
+int edgeNumber = 0;
 
 bool checkIfInside(listElement * check, int dest);
+int GraphGenerator::getEdgeNumber()
+{
+    return edgeNumber;
+}
 void GraphGenerator::generateGraph(int v, int density, bool direct) {
 
     generator.seed(std::chrono::system_clock::now().time_since_epoch().count());
@@ -37,6 +38,7 @@ void GraphGenerator::generateGraph(int v, int density, bool direct) {
         if (e < v - 1) {
             e = v - 1;
         }
+        edgeNumber = e;
     }
 
 
@@ -57,37 +59,45 @@ void GraphGenerator::generateGraph(int v, int density, bool direct) {
     if (density == 99)
     {
         numOfIndex = new int[v]{0};
-
-
+        std::uniform_int_distribution<int> turn(0, 20);
+        int from,to;
         for (int i = 0; i < v; i++) {
 
             for (int j = i + 1; j < v; j++)
             {
-
-
-
+                int path = turn(generator);
+                if(path%2 == 0)
+                {
+                    from = i;
+                    to = j;
+                }
+                else
+                {
+                    from = j;
+                    to = i;
+                }
 
                 weight = edgeWeightDist(generator);
                 nextElement = new listElement;
-                nextElement->v = j;
+                nextElement->v = to;
                 nextElement->wei = weight;
-                nextElement->next = graphList[i];
-                graphList[i] = nextElement;
+                nextElement->next = graphList[from];
+                graphList[from] = nextElement;
 
                 if (!direct) {
                     nextElement = new listElement;
-                    nextElement->v = i;
+                    nextElement->v = from;
                     nextElement->wei = weight;
-                    nextElement->next = graphList[j];
-                    graphList[j] = nextElement;
+                    nextElement->next = graphList[to];
+                    graphList[to] = nextElement;
 
-                    graphMatrix[i][tempE] = weight;
-                    graphMatrix[j][tempE] = -weight;
+                    graphMatrix[from][tempE] = weight;
+                    graphMatrix[to][tempE] = -weight;
                     tempE++;
 
                 } else {
-                    graphMatrix[i][tempE] = weight;
-                    graphMatrix[j][tempE] = -1;
+                    graphMatrix[from][tempE] = weight;
+                    graphMatrix[to][tempE] = -1;
                     tempE++;
                 }
                 numOfIndex[i]++;
@@ -98,7 +108,7 @@ void GraphGenerator::generateGraph(int v, int density, bool direct) {
         if(e/100)
         {
             int numToDel = e/100;
-            std::cout<<"E = "<<e<<std::endl;
+//            std::cout<<"E = "<<e<<std::endl;
             int vortex = 0;
             int edges = e;
 
@@ -167,64 +177,71 @@ void GraphGenerator::generateGraph(int v, int density, bool direct) {
                     }
 
                 }
-//                std::cout<<"Del from "<<delFrom <<"edge to "<<delTo<<std::endl;;
-
-
-
-
-//                int idx = index(generator);
-//                int delTo=0;
-//                vortex = destination(generator);
-//                std::cout<<"Del from "<<vortex;
-//                while(numOfIndex[vortex] < 2  || !graphList[vortex])
-//                {
-//                    vortex = destination(generator);
-//                }
-//
-//                listElement* toDelete = graphList[vortex];
-//
-//                if(idx == 0)
-//                {
-//                    graphList[vortex] = toDelete->next;
-//                    delTo = toDelete->v;
-//                    std::cout<<" edge to "<<toDelete->v<<std::endl;
-//                }
-//                else
-//                {
-//                    listElement* toDelprev;
-//                    for(int i=0;i<idx;i++)
-//                    {
-//                        toDelprev = toDelete;
-//                        toDelete=toDelete->next;
-//                    }
-//                    delTo = toDelete->v;
-//                    toDelprev->next = toDelete->next;
-//                    std::cout<<" edge to "<<toDelete->v<<std::endl;
-//
-//
-//
-//                }
 
                 for(int i = 0; i<e; i++)
                 {
                     if(graphMatrix[delFrom][i] != 0 && graphMatrix[delTo][i] != 0)
                     {
-                        graphMatrix[delFrom][i] = 0;
-                        graphMatrix[delTo][i] = 0;
+                        int swapFrom = 0;
+                        int swapTo = 0;
+                        int swapWeight = 0;
+                        if(i != e-1)
+                        {
+                            for (int x = 0; x < v; x++) {
+                                if (graphMatrix[x][e - 1] > 0) {
+                                    swapFrom = x;
+                                    swapWeight = graphMatrix[x][e - 1];
+                                }
+                                if (graphMatrix[x][e - 1] < 0)
+                                    swapTo = x;
+
+                                if (swapWeight != 0 && swapTo != 0 && swapFrom != 0)
+                                    break;
+                            }
+
+                            graphMatrix[delFrom][i] = 0;
+                            graphMatrix[delTo][i] = 0;
+                            graphMatrix[swapFrom][i] = swapWeight;
+                            graphMatrix[swapTo][i] = -1;
+
+
+                        }
+
+                        e--;
+
                         break;
                     }
                 }
 
 
+
                 numOfIndex[vortex]--;
                 numToDel--;
 
+            }
+            int ** tempMatrix = new int* [v];
 
+            for(int i = 0; i<v;i++)
+            {
+                tempMatrix[i] = new int[e];
+                std::copy(graphMatrix[i],graphMatrix[i]+e,tempMatrix[i]);
+                delete[] graphMatrix[i];
             }
 
+            graphMatrix = new int * [v];
+
+            for(int i = 0;i<v;i++)
+            {
+                graphMatrix[i] = new int [e];
+                std::copy(tempMatrix[i],tempMatrix[i]+e,graphMatrix[i]);
+                delete[] tempMatrix[i];
+            }
+
+            delete[] tempMatrix;
 
 
         }
+        edgeNumber = e;
 
         delete[] numOfIndex;
 
@@ -298,6 +315,7 @@ void GraphGenerator::generateGraph(int v, int density, bool direct) {
 
             }
         }
+//        edgeNumber = e;
     }
     }
 

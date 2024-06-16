@@ -19,7 +19,7 @@ struct Edge {
 
 
 
-void BellmanFord::runOnMatrix(int** graphMatrix, int v, int e, int start, int end) {
+double BellmanFord::runOnMatrix(int** graphMatrix, int v, int e, int start, int end,bool print) {
     startCounter();
 
     int * cost = new int[v];
@@ -43,8 +43,12 @@ void BellmanFord::runOnMatrix(int** graphMatrix, int v, int e, int start, int en
     // Relax edges |V|-1 times
     for (int i = 0; i < v - 1; i++)
     {
+
         for(int j = 0; j<e;j++)
         {
+            from = -1;
+            to = -1;
+            weight = 0;
             for(int k = 0; k<v;k++)
             {
                 if(graphMatrix[k][j] >0)
@@ -56,7 +60,7 @@ void BellmanFord::runOnMatrix(int** graphMatrix, int v, int e, int start, int en
                     to = k;
 
             }
-            if(cost[to] > cost[from]+weight && cost[from] != MAXINT)
+            if(from != -1 && to != -1 && cost[to] > cost[from]+weight && cost[from] != MAXINT)
             {
                 cost[to] = cost[from] + weight;
                 prev[to] = from;
@@ -71,8 +75,10 @@ void BellmanFord::runOnMatrix(int** graphMatrix, int v, int e, int start, int en
     int current = end;
     int edgeIndex=0;
     while (current != start && current != -1) {
-        resultMatrix[current][edgeIndex] = -1;
-        resultMatrix[prev[current]][edgeIndex] = cost[current];
+        if (current >= 0 && current < v && prev[current] >= 0 && prev[current] < v && edgeIndex < e) {
+            resultMatrix[current][edgeIndex] = -1;
+            resultMatrix[prev[current]][edgeIndex] = cost[current];
+        }
 //        cout << "From: " << prev[current] << " To: " << current << " Weight: " << cost[current] << endl;
         current = prev[current];
         edgeIndex++;
@@ -80,33 +86,43 @@ void BellmanFord::runOnMatrix(int** graphMatrix, int v, int e, int start, int en
 
 
     double time = getCounter();
-    cout<<endl;
-    for(int i = 0;i<v;i++)
-    {    std::cout<<std::setw(3)<<i<<" |";
-        for(int l = 0; l<edgeIndex;l++)
-        {
-            std::cout<<std::setw(4)<<resultMatrix[i][l];
+
+    if(print)
+    {
+        cout<<endl;
+        for(int i = 0;i<v;i++)
+        {    std::cout<<std::setw(3)<<i<<" |";
+            for(int l = 0; l<edgeIndex;l++)
+            {
+                std::cout<<std::setw(4)<<resultMatrix[i][l];
+            }
+            std::cout<<std::setw(3)<<"|"<<std::endl;
         }
-        std::cout<<std::setw(3)<<"|"<<std::endl;
+
+        cout <<endl<< "Waga calkowita od " << start << " do " << end << " wynosi " << cost[end] << endl<<endl;
+        cout<<"Czas dzialania: "<<time<<endl<<endl;
     }
 
-    cout <<endl<< "Waga calkowita od " << start << " do " << end << " wynosi " << cost[end] << endl<<endl;
-    cout<<"Czas dzialania: "<<time<<endl<<endl;
 
     delete[] cost;
     delete[] prev;
+    for(int i = 0; i < v; i++) {
+        delete[] resultMatrix[i];
+    }
     delete[] resultMatrix;
+
+    return time;
 
 }
 
-void BellmanFord::runOnList(listElement** graphList, int v, int e, int start, int end) {
+double BellmanFord::runOnList(listElement** graphList, int v, int e, int start, int end,bool print) {
 
     startCounter();
     int * cost = new int[v];
     int * prev = new int[v];
     auto ** resultList = new listElement * [v];
 
-    // Convert graph list to edge list
+
     for (int i = 0; i < v; i++) {
         resultList[i] = nullptr;
         cost[i] = MAXINT;
@@ -153,25 +169,34 @@ void BellmanFord::runOnList(listElement** graphList, int v, int e, int start, in
 
     double time = getCounter();
 
-    cout<<endl;
-    for(int i = 0; i < v; i++)
-    {
-        std::cout << "V [" << i << "] =";
-        result = resultList [i];
-        while(result)
-        {
-            std::cout <<std::setw(3)<< result->v<<":"<<result->wei;
-            result = result->next;
-        }
-        std::cout<<std::endl;
+    if(print)
 
+    {
+        cout<<endl;
+        for (int i = 0; i < v; i++) {
+            std::cout << "V [" << i << "] =";
+            result = resultList[i];
+            while (result) {
+                std::cout << std::setw(3) << result->v << ":" << result->wei;
+                result = result->next;
+            }
+            std::cout << std::endl;
+
+        }
+
+        cout << endl << "Waga calkowita od " << start << " do " << end << " wynosi " << cost[end] << endl << endl;
+        cout << "Czas dzialania: " << time << endl << endl;
     }
 
-    cout <<endl<< "Waga calkowita od " << start << " do " << end << " wynosi " << cost[end] << endl<<endl;
-    cout<<"Czas dzialania: "<<time<<endl<<endl;
-
-    delete[] result;
+//    delete[] result;
     delete[] cost;
     delete[] prev;
+    for(int i = 0 ; i<v; i++)
+    {
+        if(resultList[i] != nullptr)
+            delete[] resultList[i];
+    }
     delete[] resultList;
+
+    return time;
 }

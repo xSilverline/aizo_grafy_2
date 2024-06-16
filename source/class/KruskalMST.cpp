@@ -7,7 +7,7 @@
 
 using namespace std;
 
-void KruskalMST::runOnMatrix(int **graphMatrix, int v, int e)
+double KruskalMST::runOnMatrix(int **graphMatrix, int v, int e,bool print)
 {
     startCounter();
     PriorityQueue priorityQueue{e};
@@ -148,29 +148,31 @@ void KruskalMST::runOnMatrix(int **graphMatrix, int v, int e)
     }
     double time = getCounter();
 
-    for(int i = 0;i<v;i++)
-    {    cout<<setw(3)<<i<<" |";
-        for(int j = 0; j<n;j++)
-        {
-            cout<<setw(4)<<mstMatrix[i][j];
+    if(print) {
+        for (int i = 0; i < v; i++) {
+            cout << setw(3) << i << " |";
+            for (int j = 0; j < n; j++) {
+                cout << setw(4) << mstMatrix[i][j];
+            }
+            cout << setw(3) << "|" << endl;
         }
-        cout<<setw(3)<<"|"<<endl;
+
+
+        std::cout << std::endl;
+        std::cout << "Waga: " << sumWeight << std::endl;
+        std::cout << std::endl;
+
+        cout << "Czas dzialania: " << time << endl << endl;
     }
-
-
-
-    std::cout<<std::endl;
-    std::cout<<"Waga: "<<sumWeight<<std::endl;
-    std::cout<<std::endl;
-
-    cout<<"Czas dzialania: "<<time<<endl<<endl;
 
 
     delete[] mstMatrix;
 
+    return time;
+
 }
 
-void KruskalMST::runOnList(listElement **graphList, int v, int e) {
+double KruskalMST::runOnList(listElement **graphList, int v, int e,bool print) {
 
     startCounter();
     PriorityQueue priorityQueue{e};
@@ -309,27 +311,28 @@ void KruskalMST::runOnList(listElement **graphList, int v, int e) {
     }
 
     double time = getCounter();
-    for(int i = 0; i < v; i++)
-    {
-        std::cout << "V [" << i << "] =";
-        nextElement = mstList [i];
-        while(nextElement)
-        {
-            std::cout <<std::setw(3)<< nextElement->v<<":"<<nextElement->wei;
-            nextElement = nextElement->next;
+    if(print) {
+        for (int i = 0; i < v; i++) {
+            std::cout << "V [" << i << "] =";
+            nextElement = mstList[i];
+            while (nextElement) {
+                std::cout << std::setw(3) << nextElement->v << ":" << nextElement->wei;
+                nextElement = nextElement->next;
+            }
+            std::cout << std::endl;
+
         }
-        std::cout<<std::endl;
 
+        std::cout << std::endl;
+        std::cout << "Waga: " << sumWeight << std::endl;
+        std::cout << std::endl;
+
+        cout << "Czas dzialania: " << time << endl << endl;
     }
-
-    std::cout<<std::endl;
-    std::cout<<"Waga: "<<sumWeight<<std::endl;
-    std::cout<<std::endl;
-
-    cout<<"Czas dzialania: "<<time<<endl<<endl;
 
     delete[]mstList;
 
+    return time;
 
 
 

@@ -9,8 +9,8 @@
 
 class BellmanFord {
 public:
-    void runOnList(listElement** graphList, int v, int e, int start, int end);
-    void runOnMatrix(int** graphMatrix, int v, int e, int start, int end);
+    double runOnList(listElement** graphList, int v, int e, int start, int end,bool print);
+    double runOnMatrix(int** graphMatrix, int v, int e, int start, int end,bool print);
 private:
     const int MAXINT = 2147483647;
 };

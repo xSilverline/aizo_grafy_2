@@ -5,16 +5,14 @@
 #include "../headers/Counters.h"
 
 using namespace std;
-void Dijkstra::runOnMatrix(int ** graphMatrix, int v, int e, int start, int end)
+double Dijkstra::runOnMatrix(int ** graphMatrix, int v, int e, int start, int end,bool print)
 {
     startCounter();
     int * cost = new int[v];
     int * prev = new int[v];
     bool * QS = new bool[v];
     int ** resultMatrix = new int*[v];
-    int from;
-    int to;
-    int weight;
+
 
 
 
@@ -35,50 +33,64 @@ void Dijkstra::runOnMatrix(int ** graphMatrix, int v, int e, int start, int end)
 
 
     cost[start] = 0;
-    int j,k,result;
+//    int j,result;
     for(int i = 0; i<v; i++)
     {
-        for(j = 0; QS[j];j++){}
+        int k = -1;
 
-        for(k = j++; j<v;j++)
+//        for(j = 0; QS[j];j++){}
+
+        for(int j=0; j<v;j++)
         {
-            if(!QS[j] && (cost[j] < cost[k]))
+            if(!QS[j] && (k == -1 || cost[j] < cost[k]))
                 k = j;
         }
+
+        if(k == -1 || cost[k] == MAXINT)
+            break;
+
         QS[k] = true;
 
         for(int c = 0; c<e;c++)
         {
-            from = k;
-            result = graphMatrix[k][c];
-
-            if(result > 0)
+            if(graphMatrix[k][c] > 0)
             {
-                int find=0;
-                int x = 0;
-                while(find != -1)
+                int from = k;
+                int to = -1;
+                int weight  = graphMatrix[k][c];
+
+                for(int x = 0; x<v;x++)
                 {
-
-                    find = graphMatrix[x][c];
-                    x++;
+                    if(graphMatrix[x][c] == -1)
+                    {
+                        to = x;
+                        break;
+                    }
                 }
-                to = x-1;
-                weight = result;
+
+
+
+
+                if(to != -1 && !QS[to] && (cost[to] > cost[k]+weight))
+                {
+                    cost[to] = cost[from]+weight;
+                    prev[to] = from;
+                }
             }
 
-            if(!QS[to] && (cost[to] > cost[k]+weight))
-            {
-                cost[to] = cost[k]+weight;
-                prev[to] = k;
-            }
+
         }
 
     }
 
     int current = end;
     int edgeIndex=0;
-    while(current != start)
+    while(current != start && current != -1)
     {
+
+        int cst = cost[current];
+        int prv = prev[current];
+
         resultMatrix[current][edgeIndex] = -1;
         resultMatrix[prev[current]][edgeIndex] = cost[current];
 //        cout << "From: " << prev[current] << " To: " << current << " Weight: " << cost[current] << endl;
@@ -88,30 +100,34 @@ void Dijkstra::runOnMatrix(int ** graphMatrix, int v, int e, int start, int end)
 
     double time = getCounter();
 
-    cout<<endl;
-    for(int i = 0;i<v;i++)
-    {    std::cout<<std::setw(3)<<i<<" |";
-        for(int l = 0; l<edgeIndex;l++)
-        {
-            std::cout<<std::setw(4)<<resultMatrix[i][l];
+    if(print) {
+        cout << endl;
+        for (int i = 0; i < v; i++) {
+            std::cout << std::setw(3) << i << " |";
+            for (int l = 0; l < edgeIndex; l++) {
+                std::cout << std::setw(4) << resultMatrix[i][l];
+            }
+            std::cout << std::setw(3) << "|" << std::endl;
         }
-        std::cout<<std::setw(3)<<"|"<<std::endl;
+
+
+        cout << endl << "Waga calkowita od " << start << " do " << end << " wynosi " << cost[end] << endl << endl;
+
+        cout << "Czas dzialania: " << time << endl << endl;
     }
 
-
-    cout <<endl<< "Waga calkowita od " << start << " do " << end << " wynosi " << cost[end] << endl<<endl;
-
-    cout<<"Czas dzialania: "<<time<<endl<<endl;
-
-
+    for(int i = 0; i < v; i++) {
+        delete[] resultMatrix[i];
+    }
     delete []resultMatrix;
     delete [] cost;
     delete[] prev;
     delete [] QS;
 
+    return time;
 }
 
-void Dijkstra::runOnList(listElement ** graphList, int v, int e, int start, int end)
+double Dijkstra::runOnList(listElement ** graphList, int v, int e, int start, int end,bool print)
 {
     startCounter();
     int * cost = new int[v];
@@ -160,7 +176,7 @@ void Dijkstra::runOnList(listElement ** graphList, int v, int e, int start, int 
 
     int current = end;
 
-    while(current != start)
+    while(current != start && current != -1)
     {
         result = new listElement;
         result->v = current;
@@ -172,29 +188,39 @@ void Dijkstra::runOnList(listElement ** graphList, int v, int e, int start, int 
     }
     double time = getCounter();
 
+    if(print) {
+        cout << endl;
+        for (int i = 0; i < v; i++) {
+            std::cout << "V [" << i << "] =";
+            result = resultList[i];
+            while (result) {
+                std::cout << std::setw(3) << result->v << ":" << result->wei;
+                result = result->next;
+            }
+            std::cout << std::endl;
 
-    cout<<endl;
-    for(int i = 0; i < v; i++)
-    {
-        std::cout << "V [" << i << "] =";
-        result = resultList [i];
-        while(result)
-        {
-            std::cout <<std::setw(3)<< result->v<<":"<<result->wei;
-            result = result->next;
         }
-        std::cout<<std::endl;
 
+        int c = cost[end];
+
+        cout << endl << "Waga calkowita od " << start << " do " << end << " wynosi " << c << endl << endl;
+
+        cout << "Czas dzialania: " << time << endl << endl;
     }
-
-    cout <<endl<< "Waga calkowita od " << start << " do " << end << " wynosi " << cost[end] << endl<<endl;
-
-    cout<<"Czas dzialania: "<<time<<endl<<endl;
 
 
     delete [] cost;
     delete[] prev;
     delete [] QS;
+    for(int i = 0 ; i<v; i++)
+    {
+        if(resultList[i] != nullptr)
+            delete[] resultList[i];
+    }
+
     delete [] resultList;
-    delete result;
+
+
+
+    return time;
 }
